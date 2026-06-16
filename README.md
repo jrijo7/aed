@@ -1,6 +1,6 @@
 # 🔍 Análise Exploratória: Porto Seguro Data Challenge
 
-> Uma análise exploratória completa do dataset Porto Seguro do Kaggle, investigando padrões, correlações e características das variáveis para prever compra de produtos.
+> Análise exploratória completa do dataset Porto Seguro do Kaggle, investigando padrões, correlações e características das 68 variáveis explicativas para prever compra de produtos.
 
 ![Badge License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Badge R](https://img.shields.io/badge/Language-R-276DC3.svg)
@@ -11,10 +11,10 @@
 
 ## 📌 Visão Geral
 
-Este projeto realiza uma **análise exploratória de dados (EDA)** completa sobre o dataset Porto Seguro, buscando compreender:
+Este projeto realiza uma **análise exploratória de dados (EDA)** completa sobre o dataset **Porto Seguro**, buscando compreender:
 
 - 🎯 **Objetivo**: Criar uma regra de aceitação/rejeição para novos clientes baseada em padrões de compra
-- 📊 **Dados**: 70 colunas (68 variáveis explicativas + 1 ID + 1 variável resposta)
+- 📊 **Dados**: 70 colunas (1 ID + 68 variáveis explicativas + 1 variável resposta Y)
 - 👥 **Observações**: ~59.381 clientes
 - 📈 **Resultado**: Variável binária Y (0 = não comprou, 1 = comprou)
 
@@ -25,24 +25,82 @@ Este projeto realiza uma **análise exploratória de dados (EDA)** completa sobr
 ```
 porto-seguro-eda/
 │
-├── README.md                          # Este arquivo
-├── relatorio_analise_exploratoria.pdf # Relatório final (1000 palavras)
-├── codigo_analise_completo.R          # Código R comentado
+├── 📄 README.md                           ← Você está aqui
+├── 📄 LICENSE                             ← MIT License
+├── 📄 .gitignore                          ← Arquivos a ignorar
+├── 📄 CONTRIBUTING.md                     ← Como contribuir
+├── 📄 CHANGELOG.md                        ← Histórico de versões
 │
-├── data/
-│   ├── train.csv                      # Dataset principal (59.381 x 70)
-│   └── metadata.csv                   # Descrição dos tipos de variáveis
+├── 📁 data/                               ← Dados (não versionar)
+│   ├── train.csv                          ← Dataset principal
+│   ├── metadata.csv                       ← Descrição das variáveis
+│   ├── test.csv                           ← Dados de teste (não usar)
+│   └── submission_sample.csv              ← Exemplo submissão (não usar)
 │
-├── output/
-│   ├── graficos_dados_faltantes.png
-│   ├── boxplot_quantitativas_discretas.png
-│   ├── boxplot_quantitativas_continuas.png
-│   ├── correlacao_todas_variaveis.png
-│   ├── correlacao_discretas.png
-│   └── correlacao_continuas.png
+├── 📁 src/                                ← Código-fonte
+│   ├── Analise_Exploratoria.Rmd           ← Código RMarkdown PRINCIPAL
+│   └── Analise_Exploratoria_CORRIGIDA.Rmd ← Versão sem erros CRAN
 │
-└── src/
-    └── analise_exploratoria.R         # Script principal
+├── 📁 output/                             ← Saídas geradas (não versionar)
+│   ├── Analise_Exploratoria.pdf           ← Relatório em PDF (378 KB)
+│   ├── Analise_Exploratoria.html          ← Versão em HTML (12 KB)
+│   └── graficos/                          ← Gráficos individuais (se salvar)
+│
+└── 📁 docs/                               ← Documentação
+    ├── INSTRUCOES_COMO_USAR.md            ← Passo a passo
+    └── SOLUCAO_ERRO_CRAN.md               ← Solução de erros
+```
+
+---
+
+## 🚀 Como Começar
+
+### 1. Estrutura Inicial (Clone)
+
+```bash
+# Clonar repositório
+git clone https://github.com/seu-usuario/porto-seguro-eda.git
+cd porto-seguro-eda
+
+# Criar pasta de dados
+mkdir -p data
+mkdir -p output
+mkdir -p src
+mkdir -p docs
+```
+
+### 2. Adicionar Dados
+
+```bash
+# Baixar do Kaggle:
+# https://www.kaggle.com/c/porto-seguro-data-challenge/overview
+
+# Colocar nesta pasta:
+data/
+├── train.csv
+├── metadata.csv
+├── test.csv
+└── submission_sample.csv
+```
+
+### 3. Executar Análise
+
+```bash
+# Opção A: RStudio
+# 1. File → Open → src/Analise_Exploratoria_CORRIGIDA.Rmd
+# 2. Clique em [Knit → Knit to PDF]
+# 3. PDF será salvo em output/
+
+# Opção B: Terminal
+Rscript -e "rmarkdown::render('src/Analise_Exploratoria_CORRIGIDA.Rmd', output_dir='output/')"
+```
+
+### 4. Resultado
+
+```
+output/
+├── Analise_Exploratoria.pdf  ← Seu relatório
+└── Analise_Exploratoria.html ← Versão web
 ```
 
 ---
@@ -55,386 +113,314 @@ porto-seguro-eda/
 |------|-----------|-----------------|
 | **Qualitativo Nominal** | 35 | Categorias sem ordem |
 | **Qualitativo Ordinal** | 4 | Categorias com ordem |
-| **Quantitativo Discreto** | 18 | Valores inteiros, range amplo |
+| **Quantitativo Discreto** | 18 | Valores inteiros |
 | **Quantitativo Contínuo** | 12 | Valores em [0,1] |
 | **Variável Resposta (Y)** | 1 | Binária (0 ou 1) |
 
 ### Dados Faltantes
 
 - **Identificados como**: -999 (CSV) → NA (R)
-- **Padrão**: Altamente heterogêneo entre variáveis
-- **Mais críticas**: var65, var66 (~95% faltantes)
-- **Impacto**: Variáveis muito vazias têm pouca informação preditiva
+- **Padrão**: Altamente heterogêneo
+- **Críticas**: var65, var66 (~95% faltantes)
+- **Recomendação**: Remover var65 e var66
 
 ---
 
-## 🔬 Metodologia de Análise
+## 🔬 O Que a Análise Inclui
 
-### 1️⃣ Análise Univariada
+### ✅ Análise Univariada
+- Estatísticas descritivas de todas as variáveis
+- Boxplots de quantitativas (discretas e contínuas)
+- Frequências de qualitativas
 
-#### Quantitativas Discretas
-```
-✓ Boxplots para detectar distribuição e outliers
-✓ Resumos estatísticos (min, Q1, mediana, Q3, max)
-✓ Identificação de variáveis extremas (var52 com range 0-60)
-```
+### ✅ Análise Bivariada
+- Matrizes de correlação (3 tipos)
+- Testes chi-square para associação
+- Análise estratificada por Y
 
-#### Quantitativas Contínuas
-```
-✓ Distribuição em [0,1]
-✓ Heterogeneidade de comportamentos
-✓ Outliers e concentrações de valores
-```
-
-#### Qualitativas
-```
-✓ Frequências de categorias
-✓ Distribuição entre classes
-✓ Relação com variável resposta Y
-```
-
-### 2️⃣ Análise Bivariada
-
-#### Correlação Entre Variáveis Quantitativas
-```
-✓ Matriz de correlação de Pearson
-✓ Separação: discretas vs contínuas
-✓ Resultado: Baixa correlação geral (próxima a zero)
-```
-
-#### Associação Entre Variáveis Qualitativas
-```
-✓ Tabelas de contingência
-✓ Teste de independência (Chi-square)
-✓ Coeficientes de associação
-```
-
-#### Relação com Variável Resposta (Y)
-```
-✓ Correlação de cada X com Y
-✓ Boxplots estratificados por Y
-✓ Identificação de variáveis preditivas
-```
-
-### 3️⃣ Insights Principais
-
-| Achado | Implicação |
-|--------|-----------|
-| **Baixa correlação geral** | Relações complexas entre variáveis |
-| **Heterogeneidade alta** | Necessidade de normalização/padronização |
-| **Muitos dados faltantes** | Estratégia de imputação necessária |
-| **var65, var66 inúteis** | Recomendação de exclusão |
-| **Variáveis com outliers** | Possível transformação ou remoção |
+### ✅ Relatório Profissional
+- PDF com índice automático
+- 10 seções estruturadas
+- 15+ gráficos informativos
+- Conclusões estratégicas
+- Recomendações para modelagem
 
 ---
 
-## 🛠️ Como Usar
+## 📈 Principais Achados
 
-### Pré-requisitos
-
-```bash
-# R versão 4.0+
-# Pacotes necessários:
-install.packages(c("corrplot", "ggplot2", "dplyr"))
+### 1. Dados Faltantes
+```
+Heterogeneidade alta entre variáveis
+├─ var65, var66: ~95% faltantes → REMOVER
+├─ Maioria: < 10% faltantes → Imputação KNN
+└─ Impacto geral: MÍNIMO
 ```
 
-### Execução Passo a Passo
-
-#### 1. Clonar o repositório
-```bash
-git clone https://github.com/seu-usuario/porto-seguro-eda.git
-cd porto-seguro-eda
+### 2. Variáveis Quantitativas
+```
+Escalas muito diferentes
+├─ Discretas: range 0-60 (var52)
+├─ Contínuas: restritas a [0,1]
+├─ Variabilidade: ALTA (bom!)
+└─ Necessário: Padronização
 ```
 
-#### 2. Baixar dados do Kaggle
-```bash
-# Opção 1: Download manual
-# https://www.kaggle.com/c/porto-seguro-data-challenge/overview
-
-# Opção 2: Via Kaggle CLI
-kaggle competitions download -c porto-seguro-data-challenge
-unzip porto-seguro-data-challenge.zip
+### 3. Correlações
+```
+Padrão geral: BAIXA correlação
+├─ Entre variáveis: próxima a zero
+├─ Com Y: também baixa
+└─ Implicação: Relações não-lineares
 ```
 
-#### 3. Colocar arquivo na pasta correta
-```bash
-# Extrair e mover para /data
-mv train.csv data/
-mv metadata.csv data/
+### 4. Relação com Y
+```
+Balanceamento: ~50-50
+├─ Quantitativas: fraca correlação com Y
+├─ Nominais: algumas associações significativas
+└─ Modelo necessário: Complexo (RF, XGB)
 ```
 
-#### 4. Executar análise no R
+---
+
+## 🛠️ Arquivos do Projeto
+
+### Código Principal
+
+| Arquivo | Localização | Descrição | Status |
+|---------|------------|-----------|--------|
+| `Analise_Exploratoria_CORRIGIDA.Rmd` | `src/` | Versão SEM erros CRAN | ✅ Use este |
+| `Analise_Exploratoria.Rmd` | `src/` | Versão original | ⚠️ Com erro |
+
+### Saídas Geradas
+
+| Arquivo | Localização | Tamanho | Tipo |
+|---------|------------|--------|------|
+| `Analise_Exploratoria.pdf` | `output/` | 378 KB | PDF com índice |
+| `Analise_Exploratoria.html` | `output/` | 12 KB | Versão web |
+
+### Documentação
+
+| Arquivo | Localização | Conteúdo |
+|---------|------------|----------|
+| `INSTRUCOES_COMO_USAR.md` | `docs/` | Passo a passo |
+| `SOLUCAO_ERRO_CRAN.md` | `docs/` | Troubleshooting |
+
+---
+
+## 🔄 Caminhos de Arquivo (IMPORTANTE!)
+
+### Se você mantiver a estrutura recomendada:
+
 ```r
-# RStudio
-source("src/analise_exploratoria.R")
+# CAMINHOS CORRETOS para o código:
 
-# Ou via terminal
-Rscript src/analise_exploratoria.R
-```
-
-#### 5. Gráficos serão salvos em `/output`
-
----
-
-## 📈 Resultados Principais
-
-### Dados Faltantes
-
-```
-[Gráfico 1] Distribuição de NAs por variável
-├─ var65, var66: ~95% faltantes
-├─ var45-48: ~60-70% faltantes
-└─ Maioria: < 10% faltantes
-```
-
-**Conclusão**: Remover var65 e var66. Considerar imputação para outras.
-
-### Variáveis Quantitativas Discretas
-
-```
-[Gráfico 2] Boxplot de 18 variáveis discretas
-├─ var52: maior range (0-60)
-├─ var40: segundo maior (0-20)
-├─ var45, var46: muitos outliers, concentrados em 0
-└─ Outras: distribuição variada
-```
-
-**Conclusão**: Diferentes escalas. Padronização recomendada.
-
-### Variáveis Quantitativas Contínuas
-
-```
-[Gráfico 3] Boxplot de 12 variáveis contínuas
-├─ Todas em [0,1]
-├─ var56: distribuição bem dispersa
-├─ var62, var64, var65, var66: muitos outliers
-└─ Variabilidade geral alta
-```
-
-**Conclusão**: Heterogeneidade sugere transformações diferentes.
-
-### Matriz de Correlação (Todas)
-
-```
-[Gráfico 4] Heatmap de correlações
-├─ Predominância de cores claras = baixa correlação
-├─ Algumas exceções: var45-46, var53-54, var56-57, var62-64
-├─ Y correlaciona pouco com outras variáveis
-└─ Poucas relações lineares claras
-```
-
-**Conclusão**: Precisaremos de modelos complexos (ex: random forest).
-
-### Matriz de Correlação (Discretas)
-
-```
-[Gráfico 5] Correlações entre 18 variáveis discretas
-├─ var45 ↔ var46: correlação moderada (~0.4)
-├─ var53 ↔ var54: correlação moderada
-├─ Demais: baixa correlação
-└─ Y com todas: descorrelacionadas
-```
-
-**Conclusão**: Algumas variáveis redundantes, mas maioria independente.
-
-### Matriz de Correlação (Contínuas)
-
-```
-[Gráfico 6] Correlações entre 12 variáveis contínuas
-├─ var56 ↔ var57: correlação moderada (~0.5)
-├─ var59 ↔ var60: correlação moderada
-├─ var62 ↔ var64: correlação moderada
-└─ Y com todas: descorrelacionadas
-```
-
-**Conclusão**: Mais baixa correlação geral que variáveis discretas.
-
----
-
-## 💡 Insights e Recomendações
-
-### ✅ Achados Positivos
-
-1. **Dataset limpo em estrutura**: Sem inconsistências de tipo
-2. **Variável resposta balanceada**: Adequada para classificação
-3. **Variabilidade alta**: Muitos atributos diferentes para modelagem
-4. **Dados diversificados**: Múltiplos tipos facilitam captura de padrões
-
-### ⚠️ Desafios Identificados
-
-1. **Baixa correlação**: Relações não-lineares → modelos complexos necessários
-2. **Dados faltantes**: Estratégia de tratamento crítica
-3. **Escalas diferentes**: Normalização obrigatória
-4. **Outliers abundantes**: Possível influência em algoritmos sensíveis
-
-### 🎯 Próximos Passos Recomendados
-
-```
-1. PRÉ-PROCESSAMENTO
-   ├─ Remover var65, var66
-   ├─ Imputar dados faltantes (KNN, média, moda)
-   ├─ Padronizar variáveis quantitativas
-   └─ Codificar variáveis qualitativas
-
-2. ENGENHARIA DE FEATURES
-   ├─ Criar interações entre variáveis
-   ├─ Transformações não-lineares
-   ├─ Seleção de features (importância em árvores)
-   └─ Redução dimensional (PCA)
-
-3. MODELAGEM
-   ├─ Random Forest (sem normalização)
-   ├─ Gradient Boosting (XGBoost, LightGBM)
-   ├─ Regressão Logística (com normalização)
-   └─ Validação cruzada (k-fold)
-
-4. AVALIAÇÃO
-   ├─ ROC-AUC (métrica principal)
-   ├─ Matriz de confusão
-   ├─ F1-score (balanceamento)
-   └─ Curva de aprendizado
-```
-
----
-
-## 📝 Resumo do Relatório
-
-O relatório completo (`relatorio_analise_exploratoria.pdf`) contém:
-
-- ✅ **~1000 palavras** de análise textual
-- ✅ **6 gráficos principais** com explicações
-- ✅ **Matrizes de correlação** comentadas
-- ✅ **Código R completo** no apêndice
-- ✅ **Conclusões estratégicas** para modelagem
-
-**Nota obtida**: 85/100
-
----
-
-## 🔧 Código Principais
-
-### Carregar e Explorar Dados
-```r
+# ✅ CORRETO (usar estes):
 train <- read.csv("data/train.csv", na.strings = "-999")
 metadata <- read.csv("data/metadata.csv")
 
-# Resumo rápido
-head(train)
-dim(train)
-colnames(train)
-summary(train)
+# ❌ ERRADO (não usar):
+train <- read.csv("train.csv", na.strings = "-999")  # Arquivo não encontrado!
 ```
 
-### Classificar Variáveis
+### Se estiver na pasta `src/`:
+
 ```r
-qualnom <- (metadata[,2] == "Qualitativo nominal")
-qualord <- (metadata[,2] == "Qualitativo ordinal")
-quantdisc <- (metadata[,2] == "Quantitativo discreto")
-quantcont <- (metadata[,2] == "Quantitativo contínua")
+# Se executar o .Rmd da pasta src/
+train <- read.csv("../data/train.csv", na.strings = "-999")
+metadata <- read.csv("../data/metadata.csv")
 
-sum(qualnom)   # 35
-sum(qualord)   # 4
-sum(quantdisc) # 18
-sum(quantcont) # 12
+# ../ = volta uma pasta (para raiz do projeto)
 ```
 
-### Análise de Dados Faltantes
+### Para salvar outputs:
+
 ```r
-# Contar NAs por coluna
-colSums(is.na(train))
+# Salvar PDF em output/
+# (Automático quando você clica em Knit)
 
-# Visualizar
-barplot(colSums(is.na(train)), 
-        main = "Dados Faltantes por Variável",
-        las = 2)
+# Se quiser salvar gráficos individuais:
+png("output/grafico_faltantes.png", width=1200, height=600)
+# seu código de gráfico
+dev.off()
 ```
 
-### Boxplots Quantitativas
+---
+
+## 📝 Configuração do Código
+
+### Se Mudar os Caminhos
+
+Se criar uma estrutura diferente, **MUDE ISTO NO CÓDIGO**:
+
 ```r
-# Discretas
-boxplot(train[,quantdisc], 
-        main = "Quantitativas Discretas",
-        las = 2, col = "lightblue")
+# NO INÍCIO DO ARQUIVO .Rmd
 
-# Contínuas
-boxplot(train[,quantcont], 
-        main = "Quantitativas Contínuas",
-        las = 2, col = "lightblue")
+# LINHA ~10 (procure por):
+train <- read.csv("data/train.csv", na.strings = "-999")
+metadata <- read.csv("data/metadata.csv")
+
+# Mude para seu caminho se necessário:
+train <- read.csv("seu/caminho/train.csv", na.strings = "-999")
+metadata <- read.csv("seu/caminho/metadata.csv")
 ```
 
-### Matrizes de Correlação
+**AVISO**: Se mudar os caminhos, atualize também EM TODOS OS LUGARES que usa os dados.
+
+---
+
+## 🎯 Workflow Recomendado
+
+### Primeira Execução
+
+```
+1. Clone repositório
+2. Crie pastas (data, src, output, docs)
+3. Coloque train.csv e metadata.csv em data/
+4. Abra src/Analise_Exploratoria_CORRIGIDA.Rmd
+5. Clique em Knit → Knit to PDF
+6. PDF será gerado em output/
+7. Pronto! Envie para GitHub
+```
+
+### Atualizações Futuras
+
+```
+1. Edite o código .Rmd
+2. Clique em Knit
+3. Git add, commit, push
+4. GitHub atualizado!
+```
+
+---
+
+## 📊 Saídas Esperadas
+
+### PDF Gerado
+
+- **Tamanho**: ~2-3 MB
+- **Páginas**: ~20-30 (com gráficos)
+- **Tempo**: 2-5 minutos para gerar
+- **Localização**: `output/Analise_Exploratoria.pdf`
+
+### Conteúdo
+
+```
+✅ Capa (título, autor, data)
+✅ Índice (clicável)
+✅ 10 seções estruturadas
+✅ 15+ gráficos
+✅ Códigos R comentados
+✅ Tabelas e estatísticas
+✅ Conclusões estratégicas
+```
+
+---
+
+## 🚀 Enviando para GitHub
+
+### 1. Configurar .gitignore
+
+```bash
+# Já vem pronto no arquivo .gitignore
+# Ignora automaticamente:
+data/*.csv          # Dados brutos
+output/*.pdf        # PDFs grandes
+output/*.html       # HTMLs
+*.Rhistory
+.RData
+```
+
+### 2. Subir para GitHub
+
+```bash
+git add .
+git commit -m "feat: análise exploratória completa com 10 seções"
+git push origin main
+```
+
+### 3. Estrutura no GitHub
+
+```
+seu-repo/
+├── README.md                    ← Exibido automaticamente
+├── src/Analise_Exploratoria_CORRIGIDA.Rmd
+├── data/metadata.csv            ← (gitignored)
+└── docs/INSTRUCOES_COMO_USAR.md
+```
+
+---
+
+## 📞 Troubleshooting
+
+### Erro: "Arquivo não encontrado"
+
 ```r
-library(corrplot)
+# Verifique o caminho:
+getwd()  # Qual pasta o R está usando?
 
-# Todas
-cor_all <- cor(train[,quantdisc | quantcont], use = "complete.obs")
-corrplot(cor_all, method = "color", type = "upper")
-
-# Discretas
-cor_disc <- cor(train[,quantdisc], use = "complete.obs")
-corrplot(cor_disc, method = "color", type = "upper")
-
-# Contínuas
-cor_cont <- cor(train[,quantcont], use = "complete.obs")
-corrplot(cor_cont, method = "color", type = "upper")
+# Se necessário:
+setwd("C:/seu/caminho/do/projeto")
 ```
+
+### Erro: "CRAN sem mirror definido"
+
+```r
+# Execute no console:
+options(repos = c(CRAN = "https://cloud.r-project.org/"))
+install.packages("corrplot")
+```
+
+### Erro: "Dados não carregados"
+
+```r
+# Verifique:
+file.exists("data/train.csv")  # TRUE ou FALSE?
+list.files("data/")            # Quais arquivos existem?
+```
+
+---
+
+## 🎓 Próximos Passos
+
+1. ✅ **Completar EDA** (você já fez!)
+2. ⏳ **Pré-processamento**: Imputação, normalização, codificação
+3. ⏳ **Engenharia de Features**: Interações, transformações
+4. ⏳ **Modelagem**: Random Forest, XGBoost
+5. ⏳ **Validação**: Cross-validation, otimização
 
 ---
 
 ## 📚 Referências
 
-- **Kaggle**: [Porto Seguro Data Challenge](https://www.kaggle.com/c/porto-seguro-data-challenge)
-- **Documentação R**: 
-  - [corrplot](https://cran.r-project.org/web/packages/corrplot/index.html)
-  - [ggplot2](https://ggplot2.tidyverse.org/)
-  - [Base R Graphics](https://www.r-project.org/)
+- **Kaggle**: [Porto Seguro Data Challenge](https://www.kaggle.com/c/porto-seguro-data-challenge/)
+- **RMarkdown**: [rmarkdown.rstudio.com](https://rmarkdown.rstudio.com/)
+- **R Documentation**: [r-project.org](https://www.r-project.org/)
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ---
 
 ## 👨‍💻 Autor
 
-**[João Victor Lopes Rijo Gomes]**
+**[João Victor]**
+
 - GitHub: [@jrijo7](https://github.com/jrijo7)
 - Email: joaovictor_gomes.7@hotmail.com
 - LinkedIn: [jrijo7](https://www.linkedin.com/in/jrijo7/)
 
 ---
 
-## 📄 Licença
-
-Este projeto está licenciado sob a [MIT License](LICENSE) - veja o arquivo para detalhes.
-
----
-
-## 🤝 Contribuições
-
-Contribuições são bem-vindas! Para contribuir:
-
-1. Fork o repositório
-2. Crie uma branch para sua feature (`git checkout -b feature/melhoria`)
-3. Commit suas mudanças (`git commit -m 'Adiciona melhoria'`)
-4. Push para a branch (`git push origin feature/melhoria`)
-5. Abra um Pull Request
-
----
-
 ## ⭐ Se Este Projeto Ajudou
 
-Se este projeto foi útil, considere dar uma ⭐ no GitHub!
+Considere dar uma ⭐ no GitHub!
 
 ---
 
-## 🗺️ Roadmap
-
-- [ ] Adicionar análise de variáveis qualitativas
-- [ ] Implementar teste de chi-square para associações
-- [ ] Criar visualizações interativas (Shiny)
-- [ ] Adicionar análise de outliers (IQR, Z-score)
-- [ ] Implementar imputação de dados faltantes
-- [ ] Benchmark de modelos preditivos
-- [ ] Criar pipeline de pré-processamento
-
----
-
-**Última atualização**: Outubro 2021  
-**Status**: ✅ Análise Completa
+**Última atualização**: Junho 2026  
+**Status**: ✅ Análise Completa - Pronto para GitHub
