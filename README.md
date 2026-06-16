@@ -117,28 +117,6 @@ O arquivo HTML/PDF tem **10 seções**:
 
 ---
 
-## 🚀 Próximos Passos
-
-Depois de ler o relatório:
-
-### Curto Prazo (Esta semana)
-- [ ] Ler o relatório HTML/PDF
-- [ ] Entender as recomendações
-- [ ] Explorar train.csv com Python/R
-
-### Médio Prazo (Próximas 2 semanas)
-- [ ] Remover var65, var66
-- [ ] Imputar dados faltantes
-- [ ] Normalizar variáveis
-- [ ] Testar modelos
-
-### Longo Prazo (Próximo mês)
-- [ ] Otimizar hiperparâmetros
-- [ ] Criar features novas
-- [ ] Fazer submissão no Kaggle
-
----
-
 ## ❓ Dúvidas?
 
 **P: Por onde começo?**
